@@ -9,6 +9,9 @@ build:
     - image: asia.gcr.io/pupupu-cafe/hello
       docker:
         dockerfile: ./Dockerfile
+  tagPolicy:
+    gitCommit:
+      ignoreChanges: true
 profiles:
   - name: staging-app
     manifests:
