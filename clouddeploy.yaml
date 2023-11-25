@@ -1,0 +1,48 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: DeliveryPipeline
+metadata:
+  name: multiple-project
+serialPipeline:
+  stages:
+    - targetId: staging-project
+      profiles:
+        - staging-app
+    - targetId: production-project
+      profiles:
+        - production-app
+---
+# Target config
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+ name: staging-project
+description: deploy staging application
+requireApproval: false
+run:
+  location: projects/pupupu-cafe/locations/asia-northeast1
+executionConfigs:
+  - usages:
+      - RENDER
+      - PREDEPLOY
+      - DEPLOY
+      - VERIFY
+      - POSTDEPLOY
+    executionTimeout: 7200s
+---
+# Target config
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+ name: production-project
+description: deploy staging application
+requireApproval: true
+run:
+  location: projects/moonstruckdrops/locations/asia-northeast1
+executionConfigs:
+  - usages:
+      - RENDER
+      - PREDEPLOY
+      - DEPLOY
+      - VERIFY
+      - POSTDEPLOY
+    executionTimeout: 7200s
