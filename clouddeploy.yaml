@@ -7,9 +7,21 @@ serialPipeline:
     - targetId: staging-project
       profiles:
         - staging-app
+      strategy:
+        standard:
+          predeploy:
+            actions: ["pre-deployhook"]
+          postdeploy:
+            actions: ["post-deployhook"]
     - targetId: production-project
       profiles:
         - production-app
+      strategy:
+        standard:
+          predeploy:
+            actions: ["pre-deployhook"]
+          postdeploy:
+            actions: ["post-deployhook"]
 ---
 # Target config
 apiVersion: deploy.cloud.google.com/v1

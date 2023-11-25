@@ -39,3 +39,14 @@ profiles:
             - command: ["sh", "-c", "echo pre-deploy host hook running on $(hostname)!"]
           after:
             - command: ["sh", "-c", "echo post-deploy host hook running on $(hostname)!"]
+customActions:
+  - name: pre-deployhook
+    containers:
+      - name: gcloud-staging
+        image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
+        command: ["sh", "-c", "echo pre-deploy host hook running on $(hostname)!"]
+  - name: post-deployhook
+    containers:
+      - name: gcloud-production
+        image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
+        command: ["sh", "-c", "echo pre-deploy host hook running on $(hostname)!"]
