@@ -20,7 +20,7 @@ spec:
       timeoutSeconds: 300
       serviceAccountName: 1001036870171-compute@developer.gserviceaccount.com
       containers:
-      - name: hello-1
+      - name: hello
         image: asia.gcr.io/pupupu-cafe/hello
         ports:
         - name: http1
