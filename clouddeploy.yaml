@@ -10,18 +10,18 @@ serialPipeline:
       strategy:
         standard:
           predeploy:
-            actions: ["pre-deployhook"]
+            actions: ["pre-deployhook", "show-version"]
           postdeploy:
-            actions: ["post-deployhook"]
+            actions: ["post-deployhook", "show-version"]
     - targetId: production-project
       profiles:
         - production-app
       strategy:
         standard:
           predeploy:
-            actions: ["pre-deployhook"]
+            actions: ["pre-deployhook", "show-version"]
           postdeploy:
-            actions: ["post-deployhook"]
+            actions: ["post-deployhook", "show-version"]
 ---
 # Target config
 apiVersion: deploy.cloud.google.com/v1
