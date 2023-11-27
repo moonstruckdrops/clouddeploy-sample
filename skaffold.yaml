@@ -53,6 +53,6 @@ customActions:
           - "bash"
           - "-c"
           - |
-            gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/release-22.tar.gz .
-            tar xzvf release-22.tar.gz
-            gcloud builds submit --config ./cloudbuild.yaml --region asia-northeast1
+            gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/release-23.tar.gz .
+            tar xzvf release-23.tar.gz
+            gcloud builds submit --config ./cloudbuild.yaml --region asia-northeast1 --no-source
