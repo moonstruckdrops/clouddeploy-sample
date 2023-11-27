@@ -12,7 +12,7 @@ serialPipeline:
           predeploy:
             actions: ["pre-deployhook", "show-version"]
           postdeploy:
-            actions: ["post-deployhook", "show-version"]
+            actions: ["post-deployhook", "show-version", "gcloud-build"]
     - targetId: production-project
       profiles:
         - production-app
