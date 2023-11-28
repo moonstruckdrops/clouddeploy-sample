@@ -12,8 +12,6 @@ steps:
   '--images=account-pupupu-cafe=asia.gcr.io/$PROJECT_ID/account.pupupu.cafe:e5c796de4baa879def23f88a7f68a8901768c425'
   ]
   timeout: 900s
-  waitFor:
-    - push
 options:
   logging: CLOUD_LOGGING_ONLY
 timeout: 1200s
