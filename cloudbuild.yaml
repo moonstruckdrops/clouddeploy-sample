@@ -5,7 +5,7 @@ steps:
   'deploy',
   'releases',
   'create',
-  'release-${CLOUD_DEPLOY_RELEASE}',
+  'release-${_RELEASE_ID}',
   '--skaffold-version=skaffold_preview',
   '--delivery-pipeline=account-pupupu-cafe',
   '--region=asia-northeast1',
@@ -17,3 +17,5 @@ steps:
 options:
   logging: CLOUD_LOGGING_ONLY
 timeout: 1200s
+substitutions:
+  _RELEASE_ID: default_value
