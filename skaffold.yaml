@@ -53,7 +53,7 @@ customActions:
           - "bash"
           - "-c"
           - |
-            gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/release-25.tar.gz .
-            tar xzvf release-25.tar.gz
+            gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/release-27.tar.gz .
+            tar xzvf release-27.tar.gz
             release_id=${BUILD_ID:0:7}
             gcloud builds submit --config ./cloudbuild.yaml --region asia-northeast1 --no-source --substitutions=_RELEASE_ID="${release_id}"
