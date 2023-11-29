@@ -2,18 +2,11 @@ steps:
 - id: deploy
   name: gcr.io/cloud-builders/gcloud
   args: [
-  'deploy',
-  'releases',
-  'create',
-  'release-${_RELEASE_ID}',
-  '--skaffold-version=skaffold_preview',
-  '--delivery-pipeline=account-pupupu-cafe',
-  '--region=asia-northeast1',
-  '--images=account-pupupu-cafe=asia.gcr.io/$PROJECT_ID/account.pupupu.cafe:e5c796de4baa879def23f88a7f68a8901768c425'
+  "run",
+  "services",
+  "list"
   ]
   timeout: 900s
 options:
   logging: CLOUD_LOGGING_ONLY
 timeout: 1200s
-substitutions:
-  _RELEASE_ID: default_value

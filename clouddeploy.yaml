@@ -1,37 +1,36 @@
 apiVersion: deploy.cloud.google.com/v1
 kind: DeliveryPipeline
 metadata:
-  name: multiple-project
+  name: application
 serialPipeline:
   stages:
-    - targetId: staging-project
+    - targetId: staging-app
       profiles:
         - staging-app
       strategy:
         standard:
           predeploy:
-            actions: ["pre-deployhook", "show-version"]
+            actions: ["pre-deployhook"]
           postdeploy:
-            actions: ["post-deployhook", "show-version", "gcloud-build"]
-    - targetId: production-project
+            actions: ["post-staging-deployhook"]
+    - targetId: production-app
       profiles:
         - production-app
       strategy:
         standard:
           predeploy:
-            actions: ["pre-deployhook", "show-version"]
+            actions: ["pre-deployhook"]
           postdeploy:
-            actions: ["post-deployhook", "show-version"]
+            actions: ["post-production-deployhook"]
 ---
-# Target config
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
- name: staging-project
-description: deploy staging application
+ name: staging-app
+description: deploy application
 requireApproval: false
 run:
-  location: projects/pupupu-cafe/locations/asia-northeast1
+  location: projects/${GOOGLE_CLOUD_PROJECT}/locations/asia-northeast1
 executionConfigs:
   - usages:
       - RENDER
@@ -41,15 +40,14 @@ executionConfigs:
       - POSTDEPLOY
     executionTimeout: 7200s
 ---
-# Target config
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
- name: production-project
-description: deploy staging application
+ name: production-app
+description: deploy application
 requireApproval: true
 run:
-  location: projects/moonstruckdrops/locations/asia-northeast1
+  location: projects/${GOOGLE_CLOUD_PROJECT}/locations/asia-northeast1
 executionConfigs:
   - usages:
       - RENDER

@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: hello
+  name: stg-hello
   labels:
     cloud.googleapis.com/location: asia-northeast1
   annotations:
@@ -13,12 +13,12 @@ spec:
       labels:
         run.googleapis.com/startupProbeType: Default
       annotations:
-        autoscaling.knative.dev/maxScale: '100'
+        autoscaling.knative.dev/maxScale: '3'
         run.googleapis.com/startup-cpu-boost: 'true'
     spec:
       containerConcurrency: 80
       timeoutSeconds: 300
-      serviceAccountName: 1083882956739-compute@developer.gserviceaccount.com
+      serviceAccountName: 1001036870171-compute@developer.gserviceaccount.com
       containers:
       - name: hello
         image: asia.gcr.io/pupupu-cafe/hello

@@ -2,50 +2,25 @@ apiVersion: skaffold/v4beta7
 kind: Config
 metadata:
   name: app
-build:
-  local:
-    push: true
-  artifacts:
-    - image: asia.gcr.io/pupupu-cafe/hello
-      docker:
-        dockerfile: ./Dockerfile
-  tagPolicy:
-    gitCommit:
-      ignoreChanges: true
 profiles:
   - name: staging-app
     manifests:
       rawYaml:
-        - resources/stg-service.yaml
+        - resources/staging/run_service.yaml
     deploy:
       cloudrun:
-        projectid: pupupu-cafe
+        projectid: ${GOOGLE_CLOUD_PROJECT}
         region: asia-northeast1
   - name: production-app
     manifests:
       rawYaml:
-        - resources/prod-service.yaml
+        - resources/production/run_service.yaml
     deploy:
       cloudrun:
-        projectid: moonstruckdrops
+        projectid: ${GOOGLE_CLOUD_PROJECT}
         region: asia-northeast1
 customActions:
   - name: pre-deployhook
-    containers:
-      - name: gcloud-staging
-        image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
-        command: ["sh", "-c", "echo pre-deploy host hook running on $(hostname)!"]
-  - name: post-deployhook
-    containers:
-      - name: gcloud-production
-        image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
-        command: ["sh", "-c", "echo pre-deploy host hook running on $(hostname)!"]
-  - name: show-version
-    containers:
-      - name: gcloud-version
-        image: gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
-        command: ["gcloud", "--version"]
-  - name: gcloud-build
     containers:
       - name: gcloud-build
         image: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
@@ -53,7 +28,30 @@ customActions:
           - "bash"
           - "-c"
           - |
-            gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/release-27.tar.gz .
-            tar xzvf release-27.tar.gz
-            release_id=${BUILD_ID:0:7}
-            gcloud builds submit --config ./cloudbuild.yaml --region asia-northeast1 --no-source --substitutions=_RELEASE_ID="${release_id}"
+            gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/${CLOUD_DEPLOY_RELEASE}.tar.gz .
+            tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
+            gcloud builds submit --config ./cloudbuild.yaml --region asia-northeast1 --no-source
+  - name: post-staging-deployhook
+    containers:
+      - name: gcloud-build
+        image: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
+        command:
+          - "bash"
+          - "-c"
+          - |
+            gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/${CLOUD_DEPLOY_RELEASE}.tar.gz .
+            tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
+            version=${CLOUD_DEPLOY_RELEASE:0:7}
+            gcloud app deploy resources/staging/app.yaml --promote --stop-previous-version --version=${version} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello
+  - name: post-production-deployhook
+    containers:
+      - name: gcloud-build
+        image: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
+        command:
+          - "bash"
+          - "-c"
+          - |
+            gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/${CLOUD_DEPLOY_RELEASE}.tar.gz .
+            tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
+            version=${CLOUD_DEPLOY_RELEASE:0:7}
+            gcloud app deploy resources/production/app.yaml --promote --stop-previous-version --version=${version} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello

@@ -1,0 +1,30 @@
+steps:
+  - id: quiet_workers
+    name: gcr.io/cloud-builders/docker
+    args: [
+        'run',
+        '--net', 'cloudbuild',
+        '-i', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/maizo/maizo:$_IMAGE_TAG',
+        'bundle', 'exec', 'rake', 'sidekiq:workers:signal[quiet!]'
+    ]
+    env:
+      - 'SERVER_TYPE=cloudbuild'
+    timeout: 60s
+  - id: migration
+    name: gcr.io/cloud-builders/docker
+    args: [
+        'run',
+        '--net', 'cloudbuild',
+        '-i', 'asia-northeast1-docker.pkg.dev/$PROJECT_ID/maizo/maizo:$_IMAGE_TAG',
+        'bundle', 'exec', 'rails', 'db:migrate'
+    ]
+    env:
+      - 'SERVER_TYPE=cloudbuild'
+    timeout: 900s
+options:
+  pool:
+    name: 'projects/$PROJECT_ID/locations/asia-northeast1/workerPools/private-pool'
+  logging: CLOUD_LOGGING_ONLY
+timeout: 1200s
+substitutions:
+  _IMAGE_TAG: default_value

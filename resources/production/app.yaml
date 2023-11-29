@@ -1,0 +1,16 @@
+runtime: custom
+env: flex
+service: production
+
+network:
+  name: ${GOOGLE_PROJECT_ID}
+  subnetwork_name: ${GOOGLE_PROJECT_ID}
+  instance_tag: production
+
+resources:
+  cpu: 2
+  memory_gb: 7.6
+  disk_size_gb: 10
+
+manual_scaling:
+  instances: 1
