@@ -9,7 +9,7 @@ profiles:
         - resources/staging/run_service.yaml
     deploy:
       cloudrun:
-        projectid: ${GOOGLE_CLOUD_PROJECT}
+        projectid: pupupu-cafe
         region: asia-northeast1
   - name: production-app
     manifests:
@@ -17,7 +17,7 @@ profiles:
         - resources/production/run_service.yaml
     deploy:
       cloudrun:
-        projectid: ${GOOGLE_CLOUD_PROJECT}
+        projectid: pupupu-cafe
         region: asia-northeast1
 customActions:
   - name: pre-deployhook
