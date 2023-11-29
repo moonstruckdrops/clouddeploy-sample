@@ -30,7 +30,7 @@ metadata:
 description: deploy application
 requireApproval: false
 run:
-  location: projects/${GOOGLE_CLOUD_PROJECT}/locations/asia-northeast1
+  location: projects/pupupu-cafe/locations/asia-northeast1
 executionConfigs:
   - usages:
       - RENDER
@@ -47,7 +47,7 @@ metadata:
 description: deploy application
 requireApproval: true
 run:
-  location: projects/${GOOGLE_CLOUD_PROJECT}/locations/asia-northeast1
+  location: projects/pupupu-cafe/locations/asia-northeast1
 executionConfigs:
   - usages:
       - RENDER
