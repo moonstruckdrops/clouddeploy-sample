@@ -30,7 +30,7 @@ customActions:
           - |
             gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/${CLOUD_DEPLOY_RELEASE}.tar.gz .
             tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
-            gcloud builds submit --config ./cloudbuild.yaml --region asia-northeast1 --no-source
+            gcloud builds submit --config ./hooks/setup_cloudbuild.yaml --region asia-northeast1 --no-source
   - name: post-staging-deployhook
     containers:
       - name: gcloud-build
