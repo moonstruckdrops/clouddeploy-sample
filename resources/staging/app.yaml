@@ -3,8 +3,8 @@ env: flex
 service: staging
 
 network:
-  name: ${CLOUD_DEPLOY_PROJECT}
-  subnetwork_name: ${CLOUD_DEPLOY_PROJECT}
+  name: pupupu-cafe
+  subnetwork_name: pupupu-cafe-subnet-tokyo
   instance_tag: staging
 
 resources:
@@ -14,3 +14,6 @@ resources:
 
 manual_scaling:
   instances: 1
+
+includes:
+  - app_secrets.yaml
