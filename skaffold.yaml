@@ -41,8 +41,7 @@ customActions:
           - |
             gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/${CLOUD_DEPLOY_RELEASE}.tar.gz .
             tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
-            version=${CLOUD_DEPLOY_RELEASE:0:7}
-            gcloud app deploy resources/staging/app.yaml --promote --stop-previous-version --version=${version} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello
+            gcloud app deploy resources/staging/app.yaml --promote --stop-previous-version --version=${CLOUD_DEPLOY_RELEASE} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello
   - name: post-production-deployhook
     containers:
       - name: run-cloud-build-for-production
@@ -53,5 +52,4 @@ customActions:
           - |
             gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/${CLOUD_DEPLOY_RELEASE}.tar.gz .
             tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
-            version=${CLOUD_DEPLOY_RELEASE:0:7}
-            gcloud app deploy resources/production/app.yaml --promote --stop-previous-version --version=${version} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello
+            gcloud app deploy resources/production/app.yaml --promote --stop-previous-version --version=${CLOUD_DEPLOY_RELEASE} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello
