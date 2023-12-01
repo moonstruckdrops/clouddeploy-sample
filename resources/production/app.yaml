@@ -1,6 +1,6 @@
 runtime: custom
 env: flex
-service: production
+service: default
 
 network:
   name: pupupu-cafe
