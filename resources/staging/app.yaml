@@ -3,8 +3,8 @@ env: flex
 service: staging
 
 network:
-  name: ${GOOGLE_PROJECT_ID}
-  subnetwork_name: ${GOOGLE_PROJECT_ID}
+  name: ${CLOUD_DEPLOY_PROJECT}
+  subnetwork_name: ${CLOUD_DEPLOY_PROJECT}
   instance_tag: staging
 
 resources:
