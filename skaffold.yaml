@@ -36,7 +36,7 @@ customActions:
           - "bash"
           - "-c"
           - |
-            gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/${CLOUD_DEPLOY_RELEASE}.tar.gz .
+            gsutil cp gs://${CLOUD_DEPLOY_DELIVERY_PIPELINE}/${CLOUD_DEPLOY_RELEASE}.tar.gz .
             tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
             gcloud builds submit --config ./hooks/setup_cloudbuild.yaml --region asia-northeast1 --no-source
   - name: post-staging-deployhook
@@ -47,7 +47,7 @@ customActions:
           - "bash"
           - "-c"
           - |
-            gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/${CLOUD_DEPLOY_RELEASE}.tar.gz .
+            gsutil cp gs://${CLOUD_DEPLOY_DELIVERY_PIPELINE}/${CLOUD_DEPLOY_RELEASE}.tar.gz .
             tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
             gcloud app deploy resources/staging/app.yaml --promote --stop-previous-version --version=${CLOUD_DEPLOY_RELEASE} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello
   - name: post-production-deployhook
@@ -58,6 +58,6 @@ customActions:
           - "bash"
           - "-c"
           - |
-            gsutil cp gs://d5275a8d76004a658ba8e735e44e2818_clouddeploy/source/${CLOUD_DEPLOY_RELEASE}.tar.gz .
+            gsutil cp gs://${CLOUD_DEPLOY_DELIVERY_PIPELINE}/${CLOUD_DEPLOY_RELEASE}.tar.gz .
             tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
             gcloud app deploy resources/production/app.yaml --promote --stop-previous-version --version=${CLOUD_DEPLOY_RELEASE} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello
