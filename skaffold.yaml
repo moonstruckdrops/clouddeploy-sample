@@ -28,7 +28,7 @@ profiles:
         projectid: pupupu-cafe
         region: asia-northeast1
 customActions:
-  - name: pre-deployhook
+  - name: setup
     containers:
       - name: gcloud-build
         image: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
@@ -39,9 +39,9 @@ customActions:
             gsutil cp gs://${CLOUD_DEPLOY_DELIVERY_PIPELINE}/${CLOUD_DEPLOY_RELEASE}.tar.gz .
             tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
             gcloud builds submit --config ./hooks/setup_cloudbuild.yaml --region asia-northeast1 --no-source
-  - name: post-staging-deployhook
+  - name: post-deploy
     containers:
-      - name: run-cloud-build-for-staging
+      - name: run-cloud-build-for-development
         image: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
         command:
           - "bash"
@@ -49,10 +49,10 @@ customActions:
           - |
             gsutil cp gs://${CLOUD_DEPLOY_DELIVERY_PIPELINE}/${CLOUD_DEPLOY_RELEASE}.tar.gz .
             tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
-            gcloud app deploy resources/staging/app.yaml --promote --stop-previous-version --version=${CLOUD_DEPLOY_RELEASE} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello
-  - name: post-production-deployhook
+            gcloud app deploy resources/${CLOUD_DEPLOY_TARGET}/app.yaml --promote --stop-previous-version --version=${CLOUD_DEPLOY_RELEASE} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello
+  - name: teardown
     containers:
-      - name: run-cloud-build-for-production
+      - name: gcloud-build
         image: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
         command:
           - "bash"
@@ -60,4 +60,4 @@ customActions:
           - |
             gsutil cp gs://${CLOUD_DEPLOY_DELIVERY_PIPELINE}/${CLOUD_DEPLOY_RELEASE}.tar.gz .
             tar xzvf ${CLOUD_DEPLOY_RELEASE}.tar.gz
-            gcloud app deploy resources/production/app.yaml --promote --stop-previous-version --version=${CLOUD_DEPLOY_RELEASE} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello
+            gcloud builds submit --config ./hooks/teardown_cloudbuild.yaml --region asia-northeast1 --no-source
