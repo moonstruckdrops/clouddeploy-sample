@@ -1,9 +1,17 @@
 apiVersion: skaffold/v4beta7
 kind: Config
 metadata:
-  name: app
+  name: serverless
 profiles:
-  - name: staging-app
+  - name: development
+    manifests:
+      rawYaml:
+        - resources/development/run_service.yaml
+    deploy:
+      cloudrun:
+        projectid: pupupu-cafe
+        region: asia-northeast1
+  - name: staging
     manifests:
       rawYaml:
         - resources/staging/run_service.yaml
@@ -11,7 +19,7 @@ profiles:
       cloudrun:
         projectid: pupupu-cafe
         region: asia-northeast1
-  - name: production-app
+  - name: production
     manifests:
       rawYaml:
         - resources/production/run_service.yaml
