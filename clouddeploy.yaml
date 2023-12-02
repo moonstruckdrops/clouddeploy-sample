@@ -10,27 +10,27 @@ serialPipeline:
       strategy:
         standard:
           predeploy:
-            actions: ["pre-deployhook"]
+            actions: ["setup"]
           postdeploy:
-            actions: ["post-development-deployhook"]
+            actions: ["post-deploy", "teardown"]
     - targetId: staging
       profiles:
         - staging
       strategy:
         standard:
           predeploy:
-            actions: ["pre-deployhook"]
+            actions: ["setup"]
           postdeploy:
-            actions: ["post-staging-deployhook"]
+            actions: ["post-deploy", "teardown"]
     - targetId: production
       profiles:
         - production
       strategy:
         standard:
           predeploy:
-            actions: ["pre-deployhook"]
+            actions: ["setup"]
           postdeploy:
-            actions: ["post-production-deployhook"]
+            actions: ["post-deploy", "teardown"]
 ---
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
