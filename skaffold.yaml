@@ -30,7 +30,7 @@ profiles:
 customActions:
   - name: setup
     containers:
-      - name: gcloud-build
+      - name: setup
         image: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
         command:
           - "bash"
@@ -41,7 +41,7 @@ customActions:
             gcloud builds submit --config ./hooks/setup_cloudbuild.yaml --region asia-northeast1 --no-source
   - name: post-deploy
     containers:
-      - name: run-cloud-build-for-development
+      - name: deploy-appengine
         image: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
         command:
           - "bash"
@@ -52,7 +52,7 @@ customActions:
             gcloud app deploy resources/${CLOUD_DEPLOY_TARGET}/app.yaml --promote --stop-previous-version --version=${CLOUD_DEPLOY_RELEASE} --quiet --image-url=asia.gcr.io/pupupu-cafe/hello
   - name: teardown
     containers:
-      - name: gcloud-build
+      - name: teardown
         image: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
         command:
           - "bash"
