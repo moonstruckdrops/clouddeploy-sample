@@ -1,21 +1,30 @@
 apiVersion: deploy.cloud.google.com/v1
 kind: DeliveryPipeline
 metadata:
-  name: application
+  name: serverless-app-pipeline
 serialPipeline:
   stages:
-    - targetId: staging-app
+    - targetId: development
       profiles:
-        - staging-app
+        - development
+      strategy:
+        standard:
+          predeploy:
+            actions: ["pre-deployhook"]
+          postdeploy:
+            actions: ["post-development-deployhook"]
+    - targetId: staging
+      profiles:
+        - staging
       strategy:
         standard:
           predeploy:
             actions: ["pre-deployhook"]
           postdeploy:
             actions: ["post-staging-deployhook"]
-    - targetId: production-app
+    - targetId: production
       profiles:
-        - production-app
+        - production
       strategy:
         standard:
           predeploy:
@@ -26,8 +35,8 @@ serialPipeline:
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
- name: staging-app
-description: deploy application
+ name: development
+description: deploy application for development
 requireApproval: false
 run:
   location: projects/pupupu-cafe/locations/asia-northeast1
@@ -43,8 +52,25 @@ executionConfigs:
 apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
- name: production-app
-description: deploy application
+ name: staging
+description: deploy application for staging
+requireApproval: false
+run:
+  location: projects/pupupu-cafe/locations/asia-northeast1
+executionConfigs:
+  - usages:
+      - RENDER
+      - PREDEPLOY
+      - DEPLOY
+      - VERIFY
+      - POSTDEPLOY
+    executionTimeout: 7200s
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+ name: production
+description: deploy application for production
 requireApproval: true
 run:
   location: projects/pupupu-cafe/locations/asia-northeast1
@@ -56,3 +82,18 @@ executionConfigs:
       - VERIFY
       - POSTDEPLOY
     executionTimeout: 7200s
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Automation
+metadata:
+  name: serverless-app-pipeline/development-to-staging
+description: rollout development to staging
+suspended: false
+serviceAccount: 1001036870171-compute@developer.gserviceaccount.com
+selector:
+  - target:
+      id: development
+rules:
+  - promoteRelease:
+      name: development-to-staging
+      destinationTargetId: "@next"
