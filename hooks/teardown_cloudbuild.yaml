@@ -2,8 +2,8 @@ steps:
 - id: teardown
   name: gcr.io/cloud-builders/gcloud
   args: [
-  "run",
-  "services",
+  "app",
+  "versions",
   "list"
   ]
   timeout: 900s
